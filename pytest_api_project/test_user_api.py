@@ -5,13 +5,16 @@ import pytest
 def base_url():
     return "https://jsonplaceholder.typicode.com"
 
-def test_get_user_by_id(base_url):
-    user_id = 1
+@pytest.mark.parametrize("user_id,expected_name",[
+    (1,"Leanne Graham"),
+    (2,"Ervin Howell"),
+    (3,"Clementine Bauch")])
+def test_get_user_by_id(base_url,user_id,expected_name):
     response = requests.get(f"{base_url}/users/{user_id}")
     assert response.status_code == 200
     user_date = response.json()
     assert user_date['id'] == user_id
-    assert user_date['name'] == "Leanne Graham"
+    assert user_date['name'] == expected_name
     assert isinstance(user_date['email'],str)
 
 def test_creat_new_post(base_url):
